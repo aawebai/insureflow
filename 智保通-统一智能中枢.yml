@@ -1,0 +1,572 @@
+app:
+  description: InsureFlow统一智能中枢——意图识别、场景路由、跨模块上下文编排、全链路串联
+  icon: 🏠
+  icon_background: '#FFF3E0'
+  icon_type: emoji
+  mode: workflow
+  name: 智保通-统一智能中枢
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.17@f7a5c1d222d17ee419b17a80d6e4923838fe93788dc724a3af73fbc6990b3a32
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.2.0@4e5891a2f4fff19b005a662a1fadff0e56b62b2dd1b4a93bdffae83c5b38b05e
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 50
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: |
+      您好！我是 InsureFlow 智能保险助手 🏠
+
+      我可以帮您完成保险全流程服务：
+      🏷️ **产品配置** — 描述需求，自动生成保险产品定义
+      🔍 **智能核保** — 输入个人信息，多Agent协同核保评估
+      📋 **保单管家** — 保单解读、理赔指引、续保提醒
+      🔗 **全链路体验** — 从产品选择→核保→保单服务一站式完成
+
+      请告诉我您需要什么帮助？
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - 我想配置一款面向年轻人的高性价比重疾险
+    - 我是30岁程序员，有轻度脂肪肝，想买50万重疾险能过核保吗？
+    - 我想完整体验从选产品到核保到保单管理的全流程
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: hub-e1-start-llmh1
+      selected: false
+      source: '1792000000001'
+      sourceHandle: source
+      target: '1792000000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: hub-e2-llmh1-codeh1
+      selected: false
+      source: '1792000000002'
+      sourceHandle: source
+      target: '1792000000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: knowledge-retrieval
+      id: hub-e3-codeh1-kb
+      selected: false
+      source: '1792000000003'
+      sourceHandle: source
+      target: '1792000000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: hub-e4-kb-llmh2
+      selected: false
+      source: '1792000000004'
+      sourceHandle: source
+      target: '1792000000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: hub-e5-llmh2-end
+      selected: false
+      source: '1792000000005'
+      sourceHandle: source
+      target: '1792000000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 用户输入
+        type: start
+        variables:
+        - default: ''
+          hint: ''
+          label: user_input
+          max_length: 2000
+          options: []
+          placeholder: |
+            您好！我是InsureFlow智能保险助手。
+            您可以：
+            · 描述需求配置保险产品
+            · 提交个人信息进行核保评估
+            · 咨询保单、理赔、续保等问题
+            · 直接说"全链路体验"完整体验保险全流程
+          required: true
+          type: paragraph
+          variable: user_input
+      height: 108
+      id: '1792000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: hub-h1-sys-001
+          role: system
+          text: |
+            你是 InsureFlow 智能保险中台的意图识别与实体提取引擎。分析用户输入，输出精确的路由指令和实体信息。
+
+            ## 意图分类规则
+
+            1. **product_config** — 产品配置
+               触发词：配置/设计/创建产品、生成产品定义、帮我做一款保险产品、新产品上线
+               判断：用户描述"想做什么样的产品"而非"我想买XX保险"
+
+            2. **underwriting** — 核保评估
+               触发词：投保/核保/买保险/能过吗/审核/评估风险、我的职业是/年龄/健康状况、想买XX万重疾险
+               判断：用户提供个人信息并询问是否能投保
+
+            3. **policy_service** — 保单服务
+               触发词：保单/理赔/续保/条款/保障范围/能赔吗/怎么赔/缴费/复效/退保/忘记缴费
+               判断：用户已有保单或询问保单相关服务
+
+            4. **full_chain** — 全链路体验
+               触发词：全流程/全链路/完整体验/从选产品到保单/一站式/完整走一遍
+               判断：用户明确表示想体验完整的保险业务流程
+
+            5. **general** — 通用问答/信息不足
+               触发词：你好/帮助/能做什么/保险是什么/谢谢
+               判断：闲聊、问候、信息太少无法归类
+
+            ## 实体提取（根据用户输入尽可能提取）
+
+            根据意图类型提取对应实体：
+            - product_config: {product_type, target_age_range, target_income_range, special_features, competitor_reference}
+            - underwriting: {age, gender, occupation, health_conditions, target_product_type, desired_sum_insured}
+            - policy_service: {inquiry_type: "lookup"|"coverage"|"claim"|"renewal"|"change"|"complaint", policy_type, health_mention}
+            - full_chain: {starting_stage: "product"|"underwriting"|"policy", preferences}
+            - general: {topic, needs_guidance: true/false}
+
+            输出必须是合法JSON，不包含任何其他文字。
+          role: system
+        - id: hub-h1-usr-001
+          role: user
+          text: |
+            用户输入：{{#1792000000001.user_input#}}
+
+            请识别意图并提取实体。
+        - id: hub-h1-ast-001
+          role: assistant
+          text: '{
+            "intent":'
+        reasoning_format: tagged
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        structured_output_enabled: true
+        title: LLM_H1:意图识别
+        type: llm
+        vision:
+          enabled: false
+      height: 116
+      id: '1792000000002'
+      position:
+        x: 382
+        y: 291
+      positionAbsolute:
+        x: 382
+        y: 291
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(llm_output: str) -> dict:
+              """解析LLM意图识别输出，构造知识库查询"""
+              raw = llm_output
+              if isinstance(raw, str):
+                  raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+                  start = raw.find("{")
+                  end = raw.rfind("}") + 1
+                  if start >= 0 and end > start:
+                      try:
+                          data = json.loads(raw[start:end])
+                      except:
+                          data = {"intent": "general", "confidence": 0.0, "entities": {}, "needs_clarification": True}
+                  else:
+                      data = {"intent": "general", "confidence": 0.0, "entities": {}}
+              elif isinstance(raw, dict):
+                  data = raw
+              else:
+                  data = {"intent": "general", "confidence": 0.0, "entities": {}}
+
+              intent = data.get("intent", "general")
+              entities = data.get("entities", {})
+
+              if intent == "product_config":
+                  product_type = entities.get("product_type", "")
+                  query_parts = []
+                  if product_type:
+                      query_parts.append(f"{product_type} 监管规定 合规要求 等待期 免责条款")
+                      query_parts.append(f"{product_type} 市场产品参数 竞品对比 价格区间")
+                      query_parts.append(f"{product_type} 标准条款模板 费率定价指导原则")
+                  if not query_parts:
+                      query_parts.append("保险产品配置 监管规定 竞品参数 条款模板 费率定价")
+                  search_query = "；".join(query_parts)
+
+              elif intent == "underwriting":
+                  product_type = entities.get("target_product_type", "")
+                  health_conditions = entities.get("health_conditions", [])
+                  occupation = entities.get("occupation", "")
+                  query_parts = []
+                  if product_type:
+                      query_parts.append(f"{product_type} 核保规则 职业风险等级 健康核保标准")
+                      query_parts.append(f"产品-核保规则映射 {product_type}")
+                  else:
+                      query_parts.append("核保规则 职业风险等级 健康核保标准 BMI吸烟年龄")
+                  if occupation:
+                      query_parts.append(f"职业 {occupation} 风险等级 核保")
+                  if health_conditions and isinstance(health_conditions, list):
+                      for hc in health_conditions:
+                          query_parts.append(f"{hc} 核保 加费 除外 承保")
+                  query_parts.append("综合核保决策标准 标准体 次标准体 延期体 拒保体 替代方案")
+                  search_query = "；".join(query_parts)
+
+              elif intent == "policy_service":
+                  inquiry_type = entities.get("inquiry_type", "lookup")
+                  policy_type = entities.get("policy_type", "")
+                  health_mention = entities.get("health_mention", "")
+                  query_parts = []
+                  if inquiry_type == "claim":
+                      query_parts.append("理赔流程 理赔材料 理赔时效 常见拒赔案例 拒赔原因")
+                  elif inquiry_type == "coverage":
+                      query_parts.append("保单条款 保障范围 免责条款 等待期 赔付条件")
+                  elif inquiry_type == "renewal":
+                      query_parts.append("续保规则 宽限期 复效条件 保费调整 续保流程")
+                  elif inquiry_type == "lookup":
+                      query_parts.append("保单查询 保单服务 保单变更 缴费信息 退保规则")
+                  else:
+                      query_parts.append("保单服务 保单条款 理赔指南 续保规则 常见问题")
+                  if policy_type:
+                      query_parts.append(f"{policy_type} 条款 保障范围 理赔条件")
+                  if health_mention:
+                      query_parts.append(f"{health_mention} 保障范围 理赔条件 免责")
+                  query_parts.append("全链路FAQ 跨模块问题")
+                  search_query = "；".join(query_parts)
+
+              elif intent == "full_chain":
+                  starting_stage = entities.get("starting_stage", "product")
+                  query_parts = ["全链路保险服务 全链路FAQ"]
+                  if starting_stage == "product":
+                      query_parts.append("保险产品配置 产品定义 监管规定 竞品参数 条款模板")
+                  elif starting_stage == "underwriting":
+                      query_parts.append("核保规则 职业风险评估 健康核保标准 产品-核保规则映射")
+                  else:
+                      query_parts.append("保单服务 理赔指引 续保规则 核保决策-保单生成映射")
+                  search_query = "；".join(query_parts)
+
+              else:
+                  search_query = "保险基础知识 产品类型介绍 核保流程说明 保单服务介绍 常见问题"
+
+              return {
+                  "intent": intent,
+                  "entities_json": json.dumps(entities, ensure_ascii=False),
+                  "search_query": search_query
+              }
+        code_language: python3
+        outputs:
+          intent:
+            children: null
+            type: string
+          entities_json:
+            children: null
+            type: string
+          search_query:
+            children: null
+            type: string
+        selected: false
+        title: Code_H1:上下文解析
+        type: code
+        variables:
+        - value_selector:
+          - '1792000000002'
+          - text
+          value_type: string
+          variable: llm_output
+      height: 51
+      id: '1792000000003'
+      position:
+        x: 687
+        y: 282
+      positionAbsolute:
+        x: 687
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - PLACEHOLDER_UNIFIED_KB_ID
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: qwen3-rerank
+            provider: langgenius/tongyi/tongyi
+          top_k: 8
+        query_attachment_selector: []
+        query_variable_selector:
+        - '1792000000003'
+        - search_query
+        retrieval_mode: multiple
+        selected: false
+        title: KB:统一知识库
+        type: knowledge-retrieval
+      height: 89
+      id: '1792000000004'
+      position:
+        x: 988
+        y: 282
+      positionAbsolute:
+        x: 988
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1792000000004'
+          - result
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: hub-h2-sys-001
+          role: system
+          text: |
+            你是 InsureFlow 智能保险中台的统一业务处理引擎。根据识别的意图和知识库检索结果，为用户提供专业、准确的服务。
+
+            ## 当前路由信息
+            识别意图：{{#1792000000003.intent#}}
+            提取实体：{{#1792000000003.entities_json#}}
+
+            ## 知识库检索结果
+            {{#context#}}
+
+            ## 你的核心规则
+
+            ### 规则1：严格根据意图切换处理模式
+
+            **如果 intent == "product_config"（产品配置模式）**：
+            你的角色：保险产品配置顾问
+            - 如果用户需求明确（有险种和客群信息）：基于KB中的监管规定、竞品参数、条款模板，给出产品初步方案。包括：产品类型建议、目标客群、保障范围建议、等待期建议（引用监管规定）、费率区间参考（引用竞品数据）
+            - 如果用户需求模糊：友好引导补充信息，一次问1-2个问题（险种？客群年龄？预算？）
+            - 结尾提示："如需生成完整产品定义JSON和条款说明书，请使用【智保通-智能产品配置助手】应用。"
+
+            **如果 intent == "underwriting"（核保评估模式）**：
+            你的角色：核保评估顾问
+            - 基于KB中的核保规则（职业风险等级、健康核保标准、BMI吸烟年龄系数、综合决策标准），评估用户情况
+            - 如果用户信息足够：给出初步核保结论。用通俗语言解释（"根据您的情况，预计为标准体承保/次标准体加费XX%/建议延期/暂时无法承保"），说明主要风险点
+            - 如果用户信息不足：逐步引导补充。先问年龄和职业，再问健康状况
+            - 如果是拒保体：主动推荐替代方案（如拒保重疾险→推荐防癌险+意外险+惠民保，引用KB中的核保决策-保单生成映射表）
+            - 结尾提示："如需完整的多Agent核保报告（含职业评估、健康评估、精准定价），请使用【智保通-多Agent核保引擎】应用。"
+
+            **如果 intent == "policy_service"（保单服务模式）**：
+            你的角色：保单服务顾问
+            - 保单查询：给出保单状态、缴费时间、有效期等
+            - 保障咨询：用大白话解释条款，说明免责和赔付条件，标注"具体以您保单条款为准"
+            - 理赔指引：按1-2-3-4步列出流程和材料清单，预估时效，提醒常见拒赔陷阱
+            - 续保服务：说明宽限期（长期险60天/短期险30天）、复效条件（2年内）、保费调整规则
+            - 引用KB中的拒赔案例警示用户（如未如实告知、等待期内出险等）
+            - 重要约束：不提供法律建议，结尾标注"具体以您保单条款为准"
+
+            **如果 intent == "full_chain"（全链路体验模式）**：
+            你的角色：全流程向导
+            - 严格按照 阶段1(产品选择) → 阶段2(核保评估) → 阶段3(保单服务) 的顺序引导
+            - 标记当前阶段：📍 阶段X/3：XXX
+            - 阶段1：询问险种偏好（重疾险🛡️/医疗险💊/定期寿险⏰/意外险🏃），确认保额需求
+            - 阶段2：收集年龄/职业/健康状况，给出核保初步结论
+            - 阶段3：基于核保结论生成保单信息、解读保障范围、提醒注意事项
+            - 每个阶段结束时标记 ✅，并明确告知下一步
+
+            **如果 intent == "general"（通用引导模式）**：
+            你的角色：智能助手
+            - 友好回复问候
+            - 清晰介绍四大功能
+            - 引导用户说出具体需求
+
+            ### 规则2：引用知识库但不说"根据知识库"
+            引用数据时用自然表述：
+            - "根据监管规定，重疾险等待期不得低于90天"（而非"根据知识库检索结果…"）
+            - "市场上同类产品的年缴保费约在XX-XX元之间"
+            - "从过往案例来看，XX情况通常会导致拒赔"
+
+            ### 规则3：主动引导下一步
+            每次回复末尾，根据当前意图给出1-2个具体的下一步建议。
+            例如核保评估完后："下一步您可以：①查看保单详情 ②了解理赔流程 ③咨询其他险种"
+
+            ### 规则4：输出格式
+            - 使用 Markdown 格式
+            - 重要结论用**加粗**
+            - 多步骤用有序列表
+            - 多话题用 --- 分隔
+            - 费用、数字用表格或清晰标注
+            - 友好的对话语气，专业但不生硬
+        - id: hub-h2-usr-001
+          role: user
+          text: |
+            === 用户输入 ===
+            {{#1792000000001.user_input#}}
+
+            === 路由决策 ===
+            意图：{{#1792000000003.intent#}}
+            实体：{{#1792000000003.entities_json#}}
+
+            === 知识库 ===
+            {{#context#}}
+
+            请根据意图处理用户请求并生成回复。
+        selected: false
+        structured_output_enabled: false
+        title: LLM_H2:统一业务处理
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1792000000005'
+      position:
+        x: 1290
+        y: 282
+      positionAbsolute:
+        x: 1290
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1792000000005'
+          - text
+          value_type: string
+          variable: response
+        selected: false
+        title: 输出
+        type: end
+      height: 87
+      id: '1792000000006'
+      position:
+        x: 1592
+        y: 282
+      positionAbsolute:
+        x: 1592
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.75
+  rag_pipeline_variables: []

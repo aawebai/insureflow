@@ -1,0 +1,997 @@
+app:
+  description: 基于AI的保险产品智能配置工作流——输入产品需求，自动生成产品定义JSON和产品说明书
+  icon: 📋
+  icon_background: '#E8F5E9'
+  icon_type: emoji
+  mode: workflow
+  name: 智保通-智能产品配置助手
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.17@f7a5c1d222d17ee419b17a80d6e4923838fe93788dc724a3af73fbc6990b3a32
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.2.0@4e5891a2f4fff19b005a662a1fadff0e56b62b2dd1b4a93bdffae83c5b38b05e
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 50
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1791000000001-source-1791000000002-target
+      selected: false
+      source: '1791000000001'
+      sourceHandle: source
+      target: '1791000000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1791000000002-source-1791000000003-target
+      selected: false
+      source: '1791000000002'
+      sourceHandle: source
+      target: '1791000000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: knowledge-retrieval
+      id: 1791000000003-source-1791000000004-target
+      selected: false
+      source: '1791000000003'
+      sourceHandle: source
+      target: '1791000000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1791000000004-source-1791000000005-target
+      selected: false
+      source: '1791000000004'
+      sourceHandle: source
+      target: '1791000000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1791000000004-source-1791000000006-target
+      selected: false
+      source: '1791000000004'
+      sourceHandle: source
+      target: '1791000000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1791000000005-source-1791000000007-target
+      source: '1791000000005'
+      sourceHandle: source
+      target: '1791000000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1791000000006-source-1791000000007-target
+      source: '1791000000006'
+      sourceHandle: source
+      target: '1791000000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1791000000007-source-1791000000008-target
+      selected: false
+      source: '1791000000007'
+      sourceHandle: source
+      target: '1791000000008'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1791000000008-source-1791000000009-target
+      source: '1791000000008'
+      sourceHandle: source
+      target: '1791000000009'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 用户输入
+        type: start
+        variables:
+        - default: ''
+          hint: ''
+          label: product_requirement
+          max_length: 2000
+          options: []
+          placeholder: |
+            请描述你想配置的保险产品，例如：
+            "我想配置一款面向年轻人的重疾险，保额10-100万，覆盖120种重疾含轻症豁免，支持月缴，目标客群22-35岁，价格要有竞争力"
+          required: true
+          type: paragraph
+          variable: product_requirement
+      height: 108
+      id: '1791000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: a1-sys-001
+          role: system
+          text: |
+            你是一个保险产品需求分析师。从用户自然语言描述中提取产品配置要素。
+
+            提取字段及规则：
+            - product_type: 重疾险/医疗险/定期寿险/意外险/年金险/两全险，根据描述推断最匹配的险种
+            - product_concept: 用一句话概括产品定位，如"面向年轻人的高性价比重疾险"
+            - target_age_range: {min, max}，未提及填null，如"年轻人"可推断为{min:18, max:40}
+            - target_income_range: {min, max, unit:"万"}，如"中产"可推断{min:15, max:50, unit:"万"}，未提及填null
+            - target_occupations: 职业类别或行业列表，如["互联网","金融"]，未提及填null
+            - coverage_scope: 保障责任详细清单（如"120种重疾""轻症30%给付/最多6次""身故返还保费"）
+            - sum_insured_range: {min, max, step}，保留数字+单位，如{min:"10万", max:"100万", step:"10万"}
+            - payment_period_options: 可选缴费期列表，如["趸交","10年","20年","30年"]
+            - payment_frequency: 可选缴费频率，如["月缴","年缴"]
+            - special_clauses: 特色条款列表，如["轻症豁免","重症多次赔付","身故返还","运动达标增保额"]
+            - waiting_period_days: 等待期天数，如90或180，未提及填null（不编造）
+            - competitor_reference: 用户提到的参考产品名称或"想比XX更便宜"，未提及填null
+            - regulatory_region: 销售区域，默认"中国大陆"
+            - target_premium_range: {min, max, unit:"元/年"}，如"价格要有竞争力"可尝试推断，未提及填null
+
+            输出必须是合法JSON，不包含任何其他文字。未提及字段填null，不要编造数值。
+        - id: a1-usr-001
+          role: user
+          text: |
+            请从以下产品需求描述中提取配置要素：
+
+            用户输入：{{#1791000000001.product_requirement#}}
+        - id: a1-ast-001
+          role: assistant
+          text: '{
+
+            "product_type":'
+        reasoning_format: tagged
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: true
+        structured_output_enabled: true
+        title: LLM_A1:需求解析
+        type: llm
+        vision:
+          enabled: false
+      height: 116
+      id: '1791000000002'
+      position:
+        x: 382
+        y: 291
+      positionAbsolute:
+        x: 382
+        y: 291
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(requirement_json: str) -> dict:
+              """
+              从需求解析JSON中构造精准的产品知识库查询语句
+              生成涵盖监管、竞品、模板三类信息的综合查询
+              """
+              # 安全解析
+              if isinstance(requirement_json, str):
+                  requirement_json = re.sub(r"<think>.*?</think>", "", requirement_json, flags=re.DOTALL).strip()
+                  try:
+                      data = json.loads(requirement_json)
+                  except:
+                      data = {}
+              else:
+                  data = requirement_json if isinstance(requirement_json, dict) else {}
+
+              product_type = data.get("product_type", "")
+              special_clauses = data.get("special_clauses", [])
+              target_age = data.get("target_age_range", {})
+              regulatory_region = data.get("regulatory_region", "中国大陆")
+              competitor_ref = data.get("competitor_reference", "")
+
+              # 查询1：监管要求与合规边界
+              query1_parts = []
+              if product_type:
+                  query1_parts.append(f"{product_type}监管规定")
+              if regulatory_region:
+                  query1_parts.append(f"{regulatory_region}适用规则")
+              query1_parts.append("合规要求")
+              query1_parts.append("等待期要求 免责条款规定 轻症给付上限")
+              search_query_1 = "；".join(query1_parts)
+
+              # 查询2：同类产品参考
+              query2_parts = []
+              if product_type:
+                  query2_parts.append(f"{product_type}市场产品参数对比")
+              if target_age:
+                  min_age = target_age.get("min", "")
+                  max_age = target_age.get("max", "")
+                  if min_age or max_age:
+                      query2_parts.append(f"投保年龄{min_age}-{max_age}岁")
+              if competitor_ref:
+                  query2_parts.append(f"竞品参考：{competitor_ref}")
+              query2_parts.append("价格区间 保障责任 特色条款")
+              search_query_2 = "；".join(query2_parts)
+
+              # 查询3：条款模板
+              query3_parts = ["标准条款模板"]
+              if product_type:
+                  query3_parts.append(f"{product_type}条款范例")
+              if special_clauses and isinstance(special_clauses, list):
+                  for clause in special_clauses:
+                      query3_parts.append(f"{clause}条款模板")
+              query3_parts.append("免责条款 宽限期 复效条款 等待期条款")
+              search_query_3 = "；".join(query3_parts)
+
+              # 合并查询
+              combined_query = f"{search_query_1}；{search_query_2}；{search_query_3}"
+
+              return {
+                  "search_query": combined_query,
+                  "query_breakdown": {
+                      "regulatory": search_query_1,
+                      "competitor": search_query_2,
+                      "template": search_query_3
+                  },
+                  "user_data": data
+              }
+        code_language: python3
+        outputs:
+          search_query:
+            children: null
+            type: string
+          user_data:
+            children: null
+            type: object
+          query_breakdown:
+            children: null
+            type: object
+        selected: false
+        title: Code_A1:查询构造
+        type: code
+        variables:
+        - value_selector:
+          - '1791000000002'
+          - text
+          value_type: string
+          variable: requirement_json
+      height: 51
+      id: '1791000000003'
+      position:
+        x: 687
+        y: 282
+      positionAbsolute:
+        x: 687
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - PLACEHOLDER_KB_ID_REPLACE_AFTER_IMPORT
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: qwen3-rerank
+            provider: langgenius/tongyi/tongyi
+          top_k: 6
+        query_attachment_selector: []
+        query_variable_selector:
+        - '1791000000003'
+        - search_query
+        retrieval_mode: multiple
+        selected: false
+        title: KB:产品知识库
+        type: knowledge-retrieval
+      height: 89
+      id: '1791000000004'
+      position:
+        x: 988
+        y: 282
+      positionAbsolute:
+        x: 988
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1791000000004'
+          - result
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: a2-sys-001
+          role: system
+          text: |
+            你是一个保险产品精算师。你的任务是根据用户需求和知识库检索到的市场/监管信息，推导出完整的产品参数。
+
+            推导规则：
+
+            1. 等待期（waiting_period_days）：
+               - 重疾险默认90天（监管最低要求），若竞品多用180天且用户强调"低价"可用180天
+               - 医疗险默认30天
+               - 定期寿险默认90天
+               - 意外险默认0天（无等待期）
+
+            2. 免责条款（exclusions）：
+               - 必须包含7条法定免责（故意杀害、犯罪、自伤、吸毒、酒驾、战争、核辐射）
+               - 重疾险额外加：遗传性疾病免责、先天性畸形免责
+               - 意外险额外加：高危运动免责（除非明确覆盖）
+               - 如果知识库有参考模板，优先使用模板表述
+
+            3. 费率框架（premium_framework）：
+               - 参考知识库中同类产品的费率区间
+               - 年轻客群（<35岁）：定位在同类产品费率的下三分之一区间（"有竞争力"）
+               - 中年客群（35-55岁）：定位在市场平均费率
+               - 费率需包含性别差异（女性略低于男性，但差距不超过10%）
+
+            4. 缴费方案（payment_config）：
+               - 如果用户提到"月缴"需求：支持月缴/季缴/半年缴/年缴
+               - 缴费期选项：年轻客群最大30年、中年客群最大20年
+               - 短期险（医疗险）仅支持年缴
+
+            5. 保额限制（sum_insured_constraints）：
+               - 重疾险：最低10万，最高500万（500万以上需风控）
+               - 医疗险：一般医疗100-600万，重疾医疗200-800万
+               - 定期寿险：最低10万，最高根据年龄和收入限制（年收入x20倍为上限）
+               - 意外险：最低5万，最高500万
+
+            6. 保障期限（coverage_term）：
+               - 重疾险：定期（至70岁/80岁）或终身
+               - 医疗险：1年（保证续保期根据监管要求设置）
+               - 定期寿险：10/20/30年，或至60/65/70岁
+               - 意外险：1年
+
+            优先使用知识库中的具体数据和模板。若知识库无精确参考，按上述规则推导。
+
+            输出必须是合法JSON，不包含任何其他文字。
+        - id: a2-usr-001
+          role: user
+          text: |
+            请根据以下信息推导产品参数：
+
+            用户需求：{{#1791000000003.user_data#}}
+
+            知识库检索到的市场与监管信息：
+            {{#context#}}
+
+            请输出完整的产品参数推导结果。
+        - id: a2-ast-001
+          role: assistant
+          text: '{
+
+            "waiting_period_days":'
+        selected: false
+        structured_output_enabled: true
+        title: LLM_A2:参数推导
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1791000000005'
+      position:
+        x: 1290
+        y: 150
+      positionAbsolute:
+        x: 1290
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1791000000004'
+          - result
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: a3-sys-001
+          role: system
+          text: |
+            你是一个保险产品合规审查员。你的唯一任务是根据知识库中的监管规则，检查用户需求是否存在合规风险。
+
+            检查维度：
+
+            1. 等待期合规性：
+               - 重疾险等待期不得低于90天
+               - 医疗险等待期不得低于30天（续保无等待期除外）
+               - 不得设置"变相等待期"（如首年仅给付一定比例）
+
+            2. 免责条款合规性：
+               - 7条法定免责是否完整包含
+               - 免责条款是否显著提示（用❗标记缺少显著提示的风险）
+               - 不得设置超出法定范围的歧视性免责
+
+            3. 费率合规性：
+               - 性别差异不得超过30%（检查原则：如女/男费率比 < 0.7 则为不合规）
+               - 高龄加费不得超过精算合理范围（原则上65岁以上不超过标准体的3倍）
+               - 不得设置"保费自动上涨"陷阱条款
+
+            4. 条款表述合规性：
+               - 不得使用"确诊即赔"（重大疾病需符合定义标准才赔）
+               - 不得使用"保证续保"于短期医疗险（监管禁止）
+               - 保障范围描述不得误导性扩大
+
+            5. 销售合规性：
+               - 产品名称不得含"国家""政府""监管"等误导性词汇
+               - 不得以"免费""赠送"为噱头（保险不得作为赠品）
+
+            6. 保险利益合规性：
+               - 投保人与被保险人必须存在保险利益关系
+               - 为他人投保需取得被保险人同意
+
+            输出JSON格式：
+            {
+              "compliance_status": "pass" | "warning" | "fail",
+              "issues": [
+                {
+                  "severity": "critical" | "warning",
+                  "category": "等待期" | "免责条款" | "费率" | "条款表述" | "销售合规" | "保险利益",
+                  "description": "具体问题描述",
+                  "regulation_ref": "违反的监管规定（如能从知识库中找到则引用）",
+                  "suggestion": "修改建议"
+                }
+              ],
+              "risk_summary": "一句话总结整体合规风险"
+            }
+
+            输出必须是合法JSON，不包含任何其他文字。
+        - id: a3-usr-001
+          role: user
+          text: |
+            请对以下产品需求进行合规检查：
+
+            用户需求：{{#1791000000003.user_data#}}
+
+            知识库中的监管规则：
+            {{#context#}}
+
+            请逐项检查并输出合规报告。
+        - id: a3-ast-001
+          role: assistant
+          text: '{
+
+            "compliance_status":'
+        selected: false
+        structured_output_enabled: true
+        title: LLM_A3:合规检查
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1791000000006'
+      position:
+        x: 1290
+        y: 414
+      positionAbsolute:
+        x: 1290
+        y: 414
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+          from datetime import datetime
+          import random
+
+          def safe_parse(raw) -> dict:
+              """安全解析LLM输出的JSON（与模块B共用模式）"""
+              if raw is None:
+                  return {}
+              if isinstance(raw, dict):
+                  return raw
+              if isinstance(raw, str):
+                  raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+                  start = raw.find("{")
+                  end = raw.rfind("}") + 1
+                  if start >= 0 and end > start:
+                      try:
+                          return json.loads(raw[start:end])
+                      except:
+                          pass
+              return {}
+
+          def generate_product_code(product_type: str) -> str:
+              """生成产品代码"""
+              type_map = {
+                  "重疾险": "CI", "医疗险": "MI", "定期寿险": "TL",
+                  "意外险": "PA", "年金险": "AN", "两全险": "EN"
+              }
+              prefix = type_map.get(product_type, "XX")
+              year = datetime.now().year
+              suffix = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=3))
+              return f"{prefix}-{year}-{suffix}"
+
+          def validate_fields(params: dict, compliance: dict) -> dict:
+              """字段完整性与合理性校验"""
+              warnings = []
+              missing = []
+
+              # 必填字段检查
+              required = {
+                  "product_type": "险种类型",
+                  "coverage_scope": "保障范围",
+                  "target_age_range": "目标客群年龄"
+              }
+              for field, label in required.items():
+                  if not params.get(field):
+                      missing.append({"field": field, "label": label})
+
+              # 数值合理性检查
+              si_range = params.get("sum_insured_range", {})
+              if isinstance(si_range, dict):
+                  def parse_amount(val):
+                      if isinstance(val, (int, float)):
+                          return float(val)
+                      if isinstance(val, str):
+                          digits = ''.join(c for c in val if c.isdigit() or c == '.')
+                          try:
+                              num = float(digits)
+                              if "万" in val:
+                                  num *= 10000
+                              return num
+                          except:
+                              return None
+                      return None
+
+                  min_val = parse_amount(si_range.get("min", ""))
+                  max_val = parse_amount(si_range.get("max", ""))
+
+                  if min_val is not None and max_val is not None:
+                      if min_val > max_val:
+                          warnings.append("保额下限大于上限，数据异常")
+                      if max_val > 5000000:
+                          warnings.append("保额上限超过500万元，需要额外风控审批")
+                      if min_val < 50000 and params.get("product_type") == "重疾险":
+                          warnings.append("重疾险保额下限过低（<5万），建议至少10万起")
+
+              # 等待期检查
+              waiting_days = params.get("waiting_period_days")
+              if waiting_days is not None:
+                  try:
+                      wd = int(waiting_days)
+                      product_type = params.get("product_type", "")
+                      if product_type == "重疾险" and wd < 90:
+                          warnings.append(f"重疾险等待期{wd}天低于监管最低要求90天")
+                      if wd < 0:
+                          warnings.append("等待期不能为负数")
+                      if wd > 365:
+                          warnings.append(f"等待期{wd}天异常偏高，请确认")
+                  except:
+                      warnings.append("等待期不是有效数值")
+
+              # 合规结论汇总
+              compliance_status = compliance.get("compliance_status", "unknown")
+              compliance_issues = compliance.get("issues", [])
+              critical_issues = [i for i in compliance_issues if i.get("severity") == "critical"]
+
+              # 最终状态
+              if critical_issues:
+                  status = "needs_revision"
+              elif missing:
+                  status = "draft_incomplete"
+              elif warnings:
+                  status = "draft_with_warnings"
+              else:
+                  status = "ready_for_review"
+
+              return {
+                  "status": status,
+                  "missing_fields": missing,
+                  "warnings": warnings,
+                  "compliance_status": compliance_status,
+                  "critical_compliance_issues": len(critical_issues)
+              }
+
+          def main(params_json, compliance_json, user_data) -> dict:
+              """产品定义生成主函数"""
+              params = safe_parse(params_json)
+              compliance = safe_parse(compliance_json)
+              user = safe_parse(user_data)
+
+              # 生成产品代码
+              product_type = params.get("product_type", user.get("product_type", "未命名"))
+              product_code = generate_product_code(product_type)
+
+              # 生成产品名称
+              product_concept = user.get("product_concept", "")
+              if not product_concept:
+                  target_age = user.get("target_age_range", {})
+                  if isinstance(target_age, dict) and target_age.get("min", 0) <= 35:
+                      product_concept = f"面向年轻人的{product_type}"
+                  else:
+                      product_concept = f"综合{product_type}"
+
+              product_name = product_concept[:20] if product_concept else product_type
+
+              # 字段校验
+              validation = validate_fields(params, compliance)
+
+              # 组装完整的产品定义JSON
+              product_definition = {
+                  "product_code": product_code,
+                  "product_name": product_name,
+                  "product_concept": product_concept,
+                  "product_type": product_type,
+                  "insurance_type": product_type,
+                  "regulatory_region": user.get("regulatory_region", "中国大陆"),
+                  "target_market": {
+                      "age_range": user.get("target_age_range"),
+                      "income_range": user.get("target_income_range"),
+                      "occupations": user.get("target_occupations"),
+                      "geo_scope": user.get("regulatory_region", "中国大陆")
+                  },
+                  "coverage": {
+                      "scope": user.get("coverage_scope", ""),
+                      "sum_insured": user.get("sum_insured_range"),
+                      "special_clauses": user.get("special_clauses", [])
+                  },
+                  "terms": {
+                      "waiting_period_days": params.get("waiting_period_days"),
+                      "exclusions": params.get("exclusions", []),
+                      "grace_period_days": params.get("grace_period_days", 60),
+                      "reinstatement_period_months": params.get("reinstatement_period_months", 24)
+                  },
+                  "payment": {
+                      "period_options": params.get("payment_period_options", user.get("payment_period_options")),
+                      "frequency_options": params.get("payment_frequency_options", user.get("payment_frequency")),
+                      "premium_framework": params.get("premium_framework")
+                  },
+                  "compliance": {
+                      "status": compliance.get("compliance_status", "unchecked"),
+                      "issues_summary": compliance.get("risk_summary", ""),
+                      "critical_count": validation["critical_compliance_issues"]
+                  },
+                  "meta": {
+                      "generated_at": datetime.now().isoformat(),
+                      "status": validation["status"],
+                      "version": "1.0-draft"
+                  }
+              }
+
+              # 生成产品摘要（供其他模块引用）
+              product_brief = {
+                  "product_code": product_code,
+                  "product_type": product_type,
+                  "product_name": product_name,
+                  "product_concept": product_concept,
+                  "core_coverage": user.get("coverage_scope", ""),
+                  "waiting_period_days": params.get("waiting_period_days"),
+                  "sum_insured_range": user.get("sum_insured_range"),
+                  "target_age_range": user.get("target_age_range"),
+                  "key_exclusions": params.get("exclusions", []),
+                  "special_clauses": user.get("special_clauses", []),
+                  "premium_benchmark": params.get("premium_framework", {}),
+                  "payment": {
+                      "period_options": params.get("payment_period_options") or user.get("payment_period_options"),
+                      "frequency_options": params.get("payment_frequency_options") or user.get("payment_frequency")
+                  },
+                  "compliance_status": compliance.get("compliance_status", "unchecked"),
+                  "generated_at": datetime.now().isoformat()
+              }
+
+              return {
+                  "product_definition": json.dumps(product_definition, ensure_ascii=False, indent=2),
+                  "product_brief": json.dumps(product_brief, ensure_ascii=False),
+                  "validation_report": json.dumps(validation, ensure_ascii=False),
+                  "status": validation["status"]
+              }
+        code_language: python3
+        outputs:
+          product_definition:
+            children: null
+            type: string
+          product_brief:
+            children: null
+            type: string
+          validation_report:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        selected: false
+        title: Code_A2:产品定义生成
+        type: code
+        variables:
+        - value_selector:
+          - '1791000000005'
+          - text
+          value_type: string
+          variable: params_json
+        - value_selector:
+          - '1791000000006'
+          - text
+          value_type: string
+          variable: compliance_json
+        - value_selector:
+          - '1791000000003'
+          - user_data
+          value_type: string
+          variable: user_data
+      height: 51
+      id: '1791000000007'
+      position:
+        x: 1592
+        y: 282
+      positionAbsolute:
+        x: 1592
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: a4-sys-001
+          role: system
+          text: |
+            你是一个保险产品文案专家。你的任务是将结构化的产品定义JSON转化为一份面向产品经理和业务人员的可读产品说明书。
+
+            写作规则：
+            1. 面向内部业务人员（产品经理/核保员/渠道经理），不是面向消费者
+            2. 使用专业但易懂的语言
+            3. 所有数字和条款必须来自输入数据，不得编造
+            4. 如果某些字段为null或空，标注"待确定"而不猜测
+            5. 使用 Markdown 格式输出
+
+            说明书模板结构：
+
+            ## 一、产品概述
+            - 产品名称、代码、定位
+            - 目标市场（客群画像、销售区域）
+
+            ## 二、保障详情
+            - 保障责任详细说明
+            - 保额范围
+            - 特色条款说明
+
+            ## 三、条款要点
+            - 等待期
+            - 免责条款（逐条说明）
+            - 宽限期与复效条款
+
+            ## 四、缴费方案
+            - 可选缴费期
+            - 可选缴费频率
+            - 费率框架参考
+
+            ## 五、合规状态
+            - 合规检查结论
+            - 风险提示（如有）
+
+            ## 六、待确定事项
+            - 列举所有标注为"待确定"的字段，提示需要人工确认
+
+            ## 七、下一步建议
+            - 精算定价（需精算师确认最终费率）
+            - 条款法律审查（需法务审核免责条款）
+            - 监管备案（如适用）
+            - 系统配置（在InsureMO产品工厂中录入）
+        - id: a4-usr-001
+          role: user
+          text: |
+            请根据以下产品定义生成产品说明书：
+
+            【产品定义JSON】
+            {{#1791000000007.product_definition#}}
+
+            【校验报告】
+            {{#1791000000007.validation_report#}}
+
+            【原始需求】
+            {{#1791000000003.user_data#}}
+
+            请按模板结构生成产品说明书。
+        selected: false
+        structured_output_enabled: false
+        title: LLM_A4:产品说明
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1791000000008'
+      position:
+        x: 1894
+        y: 282
+      positionAbsolute:
+        x: 1894
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1791000000008'
+          - text
+          value_type: string
+          variable: product_brochure_md
+        - value_selector:
+          - '1791000000007'
+          - product_brief
+          value_type: string
+          variable: product_brief_json
+        - value_selector:
+          - '1791000000007'
+          - product_definition
+          value_type: string
+          variable: product_definition_json
+        - value_selector:
+          - '1791000000007'
+          - status
+          value_type: string
+          variable: status
+        selected: false
+        title: 输出
+        type: end
+      height: 87
+      id: '1791000000009'
+      position:
+        x: 2196
+        y: 282
+      positionAbsolute:
+        x: 2196
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.75
+  rag_pipeline_variables: []

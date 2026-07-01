@@ -1,0 +1,951 @@
+app:
+  description: '[仅供架构参考，不可在Dify Cloud运行] API级联调用——一次输入自动串联模块A(产品配置)→模块B(核保引擎)→模块C(保单管家)，输出完整保险全链路报告。注意：Dify Cloud沙箱禁止HTTP Request节点出站请求，此YML的设计思路正确但无法在Cloud上运行，实际可用方案为 insureflow_orchestrator.py（Python外部编排脚本）'
+  icon: 🔗
+  icon_background: '#E8EAF6'
+  icon_type: emoji
+  mode: workflow
+  name: 智保通-全链路API自动串联
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.17@f7a5c1d222d17ee419b17a80d6e4923838fe93788dc724a3af73fbc6990b3a32
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - description: Dify平台地址（如 https://cloud.dify.ai 或自部署地址）
+    id: env_dify_base_url
+    name: DIFY_BASE_URL
+    value: ''
+    value_type: string
+  - description: 模块A-智能产品配置助手的API密钥
+    id: env_api_key_a
+    name: API_KEY_MODULE_A
+    value: ''
+    value_type: string
+  - description: 模块B-多Agent核保引擎的API密钥
+    id: env_api_key_b
+    name: API_KEY_MODULE_B
+    value: ''
+    value_type: string
+  - description: 模块C-智能保单管家的API密钥
+    id: env_api_key_c
+    name: API_KEY_MODULE_C
+    value: ''
+    value_type: string
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 50
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: e1-start-llm
+      selected: false
+      source: '1731000000001'
+      sourceHandle: source
+      target: '1731000000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: e2-llm-codeA
+      selected: false
+      source: '1731000000002'
+      sourceHandle: source
+      target: '1731000000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: e3-codeA-httpA
+      selected: false
+      source: '1731000000003'
+      sourceHandle: source
+      target: '1731000000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: e4-httpA-codeB
+      selected: false
+      source: '1731000000004'
+      sourceHandle: source
+      target: '1731000000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: e5-codeB-httpB
+      selected: false
+      source: '1731000000005'
+      sourceHandle: source
+      target: '1731000000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: e6-httpB-codeC
+      selected: false
+      source: '1731000000006'
+      sourceHandle: source
+      target: '1731000000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: e7-codeC-httpC
+      selected: false
+      source: '1731000000007'
+      sourceHandle: source
+      target: '1731000000008'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: e8-httpC-codeR
+      selected: false
+      source: '1731000000008'
+      sourceHandle: source
+      target: '1731000000009'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: e9-codeR-llmR
+      selected: false
+      source: '1731000000009'
+      sourceHandle: source
+      target: '1731000000010'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: e10-llmR-end
+      selected: false
+      source: '1731000000010'
+      sourceHandle: source
+      target: '1731000000011'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - default: ''
+          hint: ''
+          label: user_input
+          max_length: 2000
+          options: []
+          placeholder: |
+            请描述您的保险需求，示例：
+            我30岁，程序员，轻度脂肪肝，想买50万重疾险，预算1万以内，希望有轻症豁免和多次赔付
+          required: true
+          type: paragraph
+          variable: user_input
+      height: 108
+      id: '1731000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: sys-extract
+          role: system
+          text: |
+            你是一个保险信息结构化提取器。从用户的自然语言输入中提取全链路所需的所有字段。
+
+            提取要求：
+            1. 所有字段尽可能填写，未提及的填null
+            2. 健康信息如实提取，不要修改用户原话
+            3. 如果用户提到了某个疾病但不确定严重程度，记录为"用户自述：XXX"
+
+            输出JSON格式：
+            {
+              "user_profile": {
+                "age": 数字或null,
+                "gender": "男"|"女"|null,
+                "occupation": "具体职业名称"或null,
+                "health_conditions": ["健康状况列表"],
+                "smoking": "有"|"无"|"未知",
+                "bmi": 数字或null
+              },
+              "insurance_request": {
+                "target_product_type": "重疾险"|"医疗险"|"定期寿险"|"意外险"|null,
+                "desired_sum_insured": "保额+单位，如50万"或null,
+                "budget_range": "预算描述"或null,
+                "special_preferences": ["偏好列表，如轻症豁免、多次赔付"],
+                "payment_preference": "月缴"|"年缴"|null
+              },
+              "product_requirement_text": "构造给模块A的产品需求描述（包含险种、客群、保额范围、特色条款、价格定位）"
+            }
+
+            输出必须是合法JSON，不包含任何其他文字。
+        - id: usr-extract
+          role: user
+          text: |
+            用户输入：{{#1731000000001.user_input#}}
+
+            请提取所有字段并构造产品需求描述。
+        - id: ast-extract
+          role: assistant
+          text: '{'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        structured_output_enabled: false
+        title: LLM:信息结构化提取
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1731000000002'
+      position:
+        x: 382
+        y: 282
+      positionAbsolute:
+        x: 382
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(llm_output: str) -> dict:
+              raw = llm_output if isinstance(llm_output, str) else str(llm_output)
+              raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+              start = raw.find("{")
+              end = raw.rfind("}") + 1
+              if start >= 0 and end > start:
+                  try:
+                      data = json.loads(raw[start:end])
+                  except:
+                      data = {}
+              else:
+                  data = {}
+
+              user_profile = data.get("user_profile", {})
+              insurance_request = data.get("insurance_request", {})
+              product_requirement_text = data.get("product_requirement_text", "")
+
+              if not product_requirement_text:
+                  target_type = insurance_request.get("target_product_type", "重疾险")
+                  sum_insured = insurance_request.get("desired_sum_insured", "50万")
+                  special = insurance_request.get("special_preferences", [])
+                  special_str = "，含" + "、".join(special) if special else ""
+                  product_requirement_text = f"配置一款{target_type}，保额{sum_insured}{special_str}，价格有竞争力，目标客群匹配用户画像"
+
+              request_body_a = json.dumps({
+                  "inputs": {
+                      "product_requirement": product_requirement_text
+                  },
+                  "response_mode": "blocking",
+                  "user": "insureflow-auto"
+              }, ensure_ascii=False)
+
+              age = user_profile.get("age", "")
+              gender = user_profile.get("gender", "")
+              occupation = user_profile.get("occupation", "")
+              health = user_profile.get("health_conditions", [])
+              health_str = "，".join(health) if health else "无异常"
+              target_type = insurance_request.get("target_product_type", "重疾险")
+              sum_insured = insurance_request.get("desired_sum_insured", "50万")
+              smoking = user_profile.get("smoking", "未知")
+
+              insure_inquiry = f"年龄{age}，性别{gender}，职业{occupation}，健康状况：{health_str}，吸烟：{smoking}，想买{sum_insured}{target_type}"
+
+              return {
+                  "request_body_a": request_body_a,
+                  "user_profile_json": json.dumps(user_profile, ensure_ascii=False),
+                  "insurance_request_json": json.dumps(insurance_request, ensure_ascii=False),
+                  "insure_inquiry": insure_inquiry
+              }
+        code_language: python3
+        outputs:
+          request_body_a:
+            children: null
+            type: string
+          user_profile_json:
+            children: null
+            type: string
+          insurance_request_json:
+            children: null
+            type: string
+          insure_inquiry:
+            children: null
+            type: string
+        selected: false
+        title: Code:提取信息+构造请求A
+        type: code
+        variables:
+        - value_selector:
+          - '1731000000002'
+          - text
+          value_type: string
+          variable: llm_output
+      height: 51
+      id: '1731000000003'
+      position:
+        x: 684
+        y: 282
+      positionAbsolute:
+        x: 684
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          type: bearer
+          config:
+            api_key: '{{#env.API_KEY_MODULE_A#}}'
+        body:
+          type: json
+          data: '{{#1731000000003.request_body_a#}}'
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 2000
+        selected: false
+        ssl_verify: true
+        timeout:
+          connect: 10
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          read: 60
+        title: HTTP_A:调用产品配置助手
+        type: http-request
+        url: '{{#env.DIFY_BASE_URL#}}/v1/workflows/run'
+      height: 89
+      id: '1731000000004'
+      position:
+        x: 986
+        y: 282
+      positionAbsolute:
+        x: 986
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(http_body: str, insure_inquiry: str, user_profile_json: str, insurance_request_json: str) -> dict:
+              body = http_body
+              if isinstance(body, str):
+                  try:
+                      resp = json.loads(body)
+                  except:
+                      resp = {}
+              elif isinstance(body, dict):
+                  resp = body
+              else:
+                  resp = {}
+
+              data = resp.get("data", {})
+              outputs = data.get("outputs", {}) if isinstance(data, dict) else {}
+
+              product_brief_str = outputs.get("product_brief_json", "{}")
+              if isinstance(product_brief_str, str):
+                  try:
+                      product_brief = json.loads(product_brief_str)
+                  except:
+                      product_brief = {}
+              elif isinstance(product_brief_str, dict):
+                  product_brief = product_brief_str
+              else:
+                  product_brief = {}
+
+              product_brochure = outputs.get("product_brochure_md", "")
+
+              request_body_b = json.dumps({
+                  "inputs": {
+                      "INSURE_inquiry": insure_inquiry,
+                      "product_context_json": json.dumps(product_brief, ensure_ascii=False) if product_brief else ""
+                  },
+                  "response_mode": "blocking",
+                  "user": "insureflow-auto"
+              }, ensure_ascii=False)
+
+              return {
+                  "request_body_b": request_body_b,
+                  "product_brief_json": json.dumps(product_brief, ensure_ascii=False),
+                  "product_brochure_md": product_brochure,
+                  "user_profile_json": user_profile_json,
+                  "insurance_request_json": insurance_request_json
+              }
+        code_language: python3
+        outputs:
+          request_body_b:
+            children: null
+            type: string
+          product_brief_json:
+            children: null
+            type: string
+          product_brochure_md:
+            children: null
+            type: string
+          user_profile_json:
+            children: null
+            type: string
+          insurance_request_json:
+            children: null
+            type: string
+        selected: false
+        title: Code:解析A响应+构造请求B
+        type: code
+        variables:
+        - value_selector:
+          - '1731000000004'
+          - body
+          value_type: string
+          variable: http_body
+        - value_selector:
+          - '1731000000003'
+          - insure_inquiry
+          value_type: string
+          variable: insure_inquiry
+        - value_selector:
+          - '1731000000003'
+          - user_profile_json
+          value_type: string
+          variable: user_profile_json
+        - value_selector:
+          - '1731000000003'
+          - insurance_request_json
+          value_type: string
+          variable: insurance_request_json
+      height: 51
+      id: '1731000000005'
+      position:
+        x: 1288
+        y: 282
+      positionAbsolute:
+        x: 1288
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          type: bearer
+          config:
+            api_key: '{{#env.API_KEY_MODULE_B#}}'
+        body:
+          type: json
+          data: '{{#1731000000005.request_body_b#}}'
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 2000
+        selected: false
+        ssl_verify: true
+        timeout:
+          connect: 10
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          read: 60
+        title: HTTP_B:调用多Agent核保引擎
+        type: http-request
+        url: '{{#env.DIFY_BASE_URL#}}/v1/workflows/run'
+      height: 89
+      id: '1731000000006'
+      position:
+        x: 1590
+        y: 282
+      positionAbsolute:
+        x: 1590
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(http_body: str, product_brief_json: str, product_brochure_md: str, user_profile_json: str, insurance_request_json: str) -> dict:
+              body = http_body
+              if isinstance(body, str):
+                  try:
+                      resp = json.loads(body)
+                  except:
+                      resp = {}
+              elif isinstance(body, dict):
+                  resp = body
+              else:
+                  resp = {}
+
+              data = resp.get("data", {})
+              outputs = data.get("outputs", {}) if isinstance(data, dict) else {}
+
+              uw_report = outputs.get("text", "") or outputs.get("result", "") or outputs.get("OUTPUT", "")
+              if not uw_report:
+                  uw_report = json.dumps(outputs, ensure_ascii=False)
+
+              product_brief = {}
+              if isinstance(product_brief_json, str):
+                  try:
+                      product_brief = json.loads(product_brief_json)
+                  except:
+                      pass
+
+              product_type = product_brief.get("product_type", "保险产品")
+              policy_inquiry = f"我刚完成{product_type}的核保，帮我看看保单生效时间、等待期、保障范围、免责条款，以及后续如何理赔和续保"
+
+              request_body_c = json.dumps({
+                  "inputs": {
+                      "policy_inquiry": policy_inquiry
+                  },
+                  "response_mode": "blocking",
+                  "user": "insureflow-auto"
+              }, ensure_ascii=False)
+
+              return {
+                  "request_body_c": request_body_c,
+                  "uw_report": uw_report,
+                  "product_brief_json": product_brief_json,
+                  "product_brochure_md": product_brochure_md,
+                  "user_profile_json": user_profile_json,
+                  "insurance_request_json": insurance_request_json
+              }
+        code_language: python3
+        outputs:
+          request_body_c:
+            children: null
+            type: string
+          uw_report:
+            children: null
+            type: string
+          product_brief_json:
+            children: null
+            type: string
+          product_brochure_md:
+            children: null
+            type: string
+          user_profile_json:
+            children: null
+            type: string
+          insurance_request_json:
+            children: null
+            type: string
+        selected: false
+        title: Code:解析B响应+构造请求C
+        type: code
+        variables:
+        - value_selector:
+          - '1731000000006'
+          - body
+          value_type: string
+          variable: http_body
+        - value_selector:
+          - '1731000000005'
+          - product_brief_json
+          value_type: string
+          variable: product_brief_json
+        - value_selector:
+          - '1731000000005'
+          - product_brochure_md
+          value_type: string
+          variable: product_brochure_md
+        - value_selector:
+          - '1731000000005'
+          - user_profile_json
+          value_type: string
+          variable: user_profile_json
+        - value_selector:
+          - '1731000000005'
+          - insurance_request_json
+          value_type: string
+          variable: insurance_request_json
+      height: 51
+      id: '1731000000007'
+      position:
+        x: 1892
+        y: 282
+      positionAbsolute:
+        x: 1892
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          type: bearer
+          config:
+            api_key: '{{#env.API_KEY_MODULE_C#}}'
+        body:
+          type: json
+          data: '{{#1731000000007.request_body_c#}}'
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 2000
+        selected: false
+        ssl_verify: true
+        timeout:
+          connect: 10
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          read: 60
+        title: HTTP_C:调用智能保单管家
+        type: http-request
+        url: '{{#env.DIFY_BASE_URL#}}/v1/workflows/run'
+      height: 89
+      id: '1731000000008'
+      position:
+        x: 2194
+        y: 282
+      positionAbsolute:
+        x: 2194
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: |
+          import json
+          import re
+
+          def main(http_body: str, uw_report: str, product_brief_json: str, product_brochure_md: str, user_profile_json: str, insurance_request_json: str) -> dict:
+              body = http_body
+              if isinstance(body, str):
+                  try:
+                      resp = json.loads(body)
+                  except:
+                      resp = {}
+              elif isinstance(body, dict):
+                  resp = body
+              else:
+                  resp = {}
+
+              data = resp.get("data", {})
+              outputs = data.get("outputs", {}) if isinstance(data, dict) else {}
+              policy_response = outputs.get("text", "") or outputs.get("response", "") or outputs.get("answer", "")
+              if not policy_response:
+                  policy_response = json.dumps(outputs, ensure_ascii=False)
+
+              return {
+                  "policy_response": policy_response,
+                  "uw_report": uw_report,
+                  "product_brochure_md": product_brochure_md,
+                  "product_brief_json": product_brief_json,
+                  "user_profile_json": user_profile_json,
+                  "insurance_request_json": insurance_request_json
+              }
+        code_language: python3
+        outputs:
+          policy_response:
+            children: null
+            type: string
+          uw_report:
+            children: null
+            type: string
+          product_brochure_md:
+            children: null
+            type: string
+          product_brief_json:
+            children: null
+            type: string
+          user_profile_json:
+            children: null
+            type: string
+          insurance_request_json:
+            children: null
+            type: string
+        selected: false
+        title: Code:解析C响应+汇总
+        type: code
+        variables:
+        - value_selector:
+          - '1731000000008'
+          - body
+          value_type: string
+          variable: http_body
+        - value_selector:
+          - '1731000000007'
+          - uw_report
+          value_type: string
+          variable: uw_report
+        - value_selector:
+          - '1731000000007'
+          - product_brief_json
+          value_type: string
+          variable: product_brief_json
+        - value_selector:
+          - '1731000000007'
+          - product_brochure_md
+          value_type: string
+          variable: product_brochure_md
+        - value_selector:
+          - '1731000000007'
+          - user_profile_json
+          value_type: string
+          variable: user_profile_json
+        - value_selector:
+          - '1731000000007'
+          - insurance_request_json
+          value_type: string
+          variable: insurance_request_json
+      height: 51
+      id: '1731000000009'
+      position:
+        x: 2496
+        y: 282
+      positionAbsolute:
+        x: 2496
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: sys-report
+          role: system
+          text: |
+            你是 InsureFlow 全链路报告生成器。将三个模块的结果整合为一份完整的保险全链路报告。
+
+            ## 报告模板
+
+            # InsureFlow 全链路自动串联报告
+
+            ## 阶段一：产品配置
+
+            {{#1731000000009.product_brochure_md#}}
+
+            ## 阶段二：智能核保
+
+            {{#1731000000009.uw_report#}}
+
+            ## 阶段三：保单服务
+
+            {{#1731000000009.policy_response#}}
+
+            ## 全链路状态
+
+            | 阶段 | 模块 | 状态 |
+            |------|------|------|
+            | 产品配置 | 智能产品配置助手 | 已完成 |
+            | 核保决策 | 多Agent核保引擎 | 已完成 |
+            | 保单服务 | 智能保单管家 | 已完成 |
+
+            ## 你的职责
+
+            1. 保持三个阶段的报告内容原样（不要编造、不要截断）
+            2. 在报告开头添加简短的执行摘要（3-5句话，概括全链路结果）
+            3. 确保 Markdown 格式正确
+            4. 如果某阶段报告为空，标注"此阶段未返回结果"
+        - id: usr-report
+          role: user
+          text: |
+            请整合以下三个模块的报告，使用模板生成全链路报告。
+
+            用户画像：{{#1731000000009.user_profile_json#}}
+            保险需求：{{#1731000000009.insurance_request_json#}}
+
+            模块A - 产品方案：
+            {{#1731000000009.product_brochure_md#}}
+
+            模块B - 核保报告：
+            {{#1731000000009.uw_report#}}
+
+            模块C - 保单服务：
+            {{#1731000000009.policy_response#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        structured_output_enabled: false
+        title: LLM:全链路报告生成
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1731000000010'
+      position:
+        x: 2798
+        y: 282
+      positionAbsolute:
+        x: 2798
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1731000000010'
+          - text
+          value_type: string
+          variable: full_chain_report
+        selected: false
+        title: End
+        type: end
+      height: 87
+      id: '1731000000011'
+      position:
+        x: 3100
+        y: 282
+      positionAbsolute:
+        x: 3100
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.6
+  rag_pipeline_variables: []
